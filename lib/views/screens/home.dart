@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   CatModList.add(
                                     CategoryModel(
                                       catName: newCategory,
-                                      catImgUrl: '', // You can provide an empty image URL or null here
+                                      catImgUrl: 'https://images.pexels.com/photos/956999/milky-way-starry-sky-night-sky-star-956999.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', // You can provide an empty image URL or null here
                                     ),
                                   );
                                 });
@@ -104,7 +104,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        Padding(
+                          padding:  EdgeInsets.only(top: 20.0),
+                          child:  SizedBox(
                           height: 50,
                           width: MediaQuery.of(context).size.width,
                           child: ListView.builder(
@@ -118,6 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                           ),
                         ),
+                       ),
                       ],
                     ),
                   ),
