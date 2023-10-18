@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/material/icons.dart';
 import 'package:wallpaper_guru/controller/apiOper.dart';
 import 'package:wallpaper_guru/model/categoryModel.dart';
 import 'package:wallpaper_guru/model/photosModel.dart';
@@ -6,6 +7,7 @@ import 'package:wallpaper_guru/views/screens/FullScreen.dart';
 import 'package:wallpaper_guru/views/widgets/CustomAppBar.dart';
 import 'package:wallpaper_guru/views/widgets/SearchBar.dart';
 import 'package:wallpaper_guru/views/widgets/catBlock.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,6 +17,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  TextEditingController _categoryController = TextEditingController(); // Add this line
   late List<PhotosModel> trendingWallList;
   late List<CategoryModel> CatModList;
   bool isLoading = true;
@@ -39,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _categoryController.clear();
     GetCatDetails();
     GetTrendingWallpapers();
   }
@@ -68,18 +72,56 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: SearchBarhere()),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 20),
-                    child: SizedBox(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: CatModList.length,
-                          itemBuilder: ((context, index) => CatBlock(
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: _categoryController,
+                                decoration: InputDecoration(
+                                  hintText: 'Add Category',
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+
+                            IconButton(
+                              icon: Icon(Icons.add),
+                              onPressed: () {
+                                // Handle the button tap to add the category to CatModList
+                                String newCategory = _categoryController.text;
+                                setState(() {
+                                  CatModList.add(
+                                    CategoryModel(
+                                      catName: newCategory,
+                                      catImgUrl: '', // You can provide an empty image URL or null here
+                                    ),
+                                  );
+                                });
+                                _categoryController.clear(); // Clear the input field
+                              },
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 50,
+                          width: MediaQuery.of(context).size.width,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: CatModList.length,
+                            itemBuilder: (context, index) {
+                              return CatBlock(
                                 categoryImgSrc: CatModList[index].catImgUrl,
                                 categoryName: CatModList[index].catName,
-                              ))),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 10),
                     height: 700,
